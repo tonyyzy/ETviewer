@@ -1,6 +1,6 @@
 var pdbid = '4kvq'
-// url = "https://cors-anywhere.herokuapp.com/http://mammoth.bcm.tmc.edu/ETserver2/pdbeasytrace/" + pdbid + "A.zip"
-url = "data/" + pdbid + "A.zip"
+url = "https://cors-anywhere.herokuapp.com/http://mammoth.bcm.tmc.edu/ETserver2/pdbeasytrace/" + pdbid + "A.zip"
+// url = "data/" + pdbid + "A.zip"
 var promise = new JSZip.external.Promise(function (resolve, reject) {
   JSZipUtils.getBinaryContent(url, function(err, data) {
       if (err) {

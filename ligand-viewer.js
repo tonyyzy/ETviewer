@@ -663,16 +663,16 @@ addElement(createElement('span', {
   innerText: 'pi-stacking'
 }, { top: getTopPosition(), left: '32px', color: 'grey' }))
 
-// loadStructure('rcsb://4kvq.mmtf').then(function () {
-//   showLigand('PLM');
-// })
+loadStructure('rcsb://4kvq.mmtf').then(function () {
+  showLigand('PLM');
+})
 
 df.then(function(result) {
   // console.log(result[Object.keys(result)[0]].join(", "))
   ETRepr.setSelection(result[Object.keys(result)[0]].join(", "))
 })
 
-loadStructure('data//4kvq.mmtf').then(function () {
-  showLigand('PLM');
-})
+// loadStructure('data//4kvq.mmtf').then(function () {
+//   showLigand('PLM');
+// })
 
