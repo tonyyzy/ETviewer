@@ -14,7 +14,7 @@ function getET(pdbid) {
 	var ETScore = {};
 	rankfile = promise.then(JSZip.loadAsync) // 2) chain with the zip promise
 		.then(function (zip) {
-			return zip.file("ET_" + pdbid + "A.ranks_sorted").async("string");
+			return zip.file("ET_" + pdbid + "A.ranks").async("string");
 		});
 	df = rankfile.then(function (content) {
 		list = content.split("\n");

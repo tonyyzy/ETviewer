@@ -7,7 +7,8 @@ const gradient = [0xFF0932,
   0x07E940,
   0x07E599,
   0x06D5E2,
-  0x067ADE]
+  0x067ADE,
+  0x001D66]
 
 // set stage for html
 const stage = new NGL.Stage("viewport");
@@ -216,7 +217,7 @@ function loadStructure (input) {
     })
     ETRepr = o.addRepresentation('hyperball', {
       sele: 'none',
-      color: 'green',
+      color: 0x00FFFFFF,
       opacity: 0.5
     })
     labelRepr = o.addRepresentation('label', {
@@ -318,11 +319,8 @@ var loadPdbidInput = createElement('input', {
   onkeypress: function (e) {
     if (e.keyCode === 13) {
       e.preventDefault()
+      pdbid = e.target.value
       loadStructure('rcsb://' + e.target.value)
-      console.log(e.target.value)
-      getET(e.target.value).then(function(o) {
-        console.log(o)
-      })
     }
   }
 }, { top: getTopPosition(20), left: '12px', width: '120px' })
@@ -387,6 +385,21 @@ function showLigand (sele) { // sele is ligandSele
     clipCenter: sview.center
   })
   labelRepr.setSelection('(' + neighborSele + ') and not (water or ion)')
+  ETRepr.setVisibility(true);
+  var s = struc.structure // structureComponenet from ngl
+  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), 5) // select ligand and get atoms in ligands
+  var withinGroup = s.getAtomSetWithinGroup(withinSele)
+  var expandedSele = withinGroup.toSeleString()
+  neighborSele = '(' + expandedSele + ') and not water'
+  ETRepr.setSelection(neighborSele)
+  getET(pdbid).then(function(rank) {
+    ETRepr.setParameters({color: NGL.ColormakerRegistry.addScheme(function() {
+      this.atomColor = function (atom) {
+        return gradient[rank[atom.resno]]
+    }
+  })
+  })
+})
 
   struc.autoView(expandedSele)
 }
@@ -678,21 +691,8 @@ addElement(createElement('span', {
   innerText: 'pi-stacking'
 }, { top: getTopPosition(), left: '32px', color: 'grey' }))
 
-loadStructure('rcsb://4kvq.mmtf').then(function () {
+pdbid = "4kvq"
+loadStructure('rcsb://' + pdbid + '.mmtf').then(function () {
   showLigand('PLM');
-  ETRepr.setVisibility(true);
-  var s = struc.structure // structureComponenet from ngl
-  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(ligandSele), 5) // select ligand and get atoms in ligands
-  var withinGroup = s.getAtomSetWithinGroup(withinSele)
-  var expandedSele = withinGroup.toSeleString()
-  ETRepr.setSelection(expandedSele)
-  getET("4kvq").then(function(rank) {
-    ETRepr.setParameters({color: NGL.ColormakerRegistry.addScheme(function() {
-      this.atomColor = function (atom) {
-        return gradient[rank[atom.resno]]
-    }
-  })
-  })
-})
 })
 
