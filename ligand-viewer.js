@@ -1,3 +1,14 @@
+const gradient = [0xFF0932,
+  0xFB4309,
+  0xF7A209,
+  0xE9F408,
+  0x88F008,
+  0x2AED07,
+  0x07E940,
+  0x07E599,
+  0x06D5E2,
+  0x067ADE]
+
 // set stage for html
 const stage = new NGL.Stage("viewport");
 NGL.DatasourceRegistry.add(
@@ -308,6 +319,10 @@ var loadPdbidInput = createElement('input', {
     if (e.keyCode === 13) {
       e.preventDefault()
       loadStructure('rcsb://' + e.target.value)
+      console.log(e.target.value)
+      getET(e.target.value).then(function(o) {
+        console.log(o)
+      })
     }
   }
 }, { top: getTopPosition(20), left: '12px', width: '120px' })
@@ -665,14 +680,19 @@ addElement(createElement('span', {
 
 loadStructure('rcsb://4kvq.mmtf').then(function () {
   showLigand('PLM');
+  ETRepr.setVisibility(true);
+  var s = struc.structure // structureComponenet from ngl
+  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(ligandSele), 5) // select ligand and get atoms in ligands
+  var withinGroup = s.getAtomSetWithinGroup(withinSele)
+  var expandedSele = withinGroup.toSeleString()
+  ETRepr.setSelection(expandedSele)
+  getET("4kvq").then(function(rank) {
+    ETRepr.setParameters({color: NGL.ColormakerRegistry.addScheme(function() {
+      this.atomColor = function (atom) {
+        return gradient[rank[atom.resno]]
+    }
+  })
+  })
 })
-
-df.then(function(result) {
-  // console.log(result[Object.keys(result)[0]].join(", "))
-  ETRepr.setSelection(result[Object.keys(result)[0]].join(", "))
 })
-
-// loadStructure('data//4kvq.mmtf').then(function () {
-//   showLigand('PLM');
-// })
 
