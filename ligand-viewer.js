@@ -390,7 +390,7 @@ function showLigand (sele) { // sele is ligandSele
   var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), 5) // select ligand and get atoms in ligands
   var withinGroup = s.getAtomSetWithinGroup(withinSele)
   var expandedSele = withinGroup.toSeleString()
-  neighborSele = '(' + expandedSele + ') and not water'
+  neighborSele = '(' + expandedSele + ') and not water and not (' + sele + ')'
   ETRepr.setSelection(neighborSele)
   getET(pdbid).then(function(rank) {
     ETRepr.setParameters({color: NGL.ColormakerRegistry.addScheme(function() {
