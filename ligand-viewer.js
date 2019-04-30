@@ -30,6 +30,11 @@ function addElement (el) {
   stage.viewer.container.appendChild(el)
 }
 
+// Handle window resizing
+window.addEventListener( "resize", function( event ){
+  stage.handleResize();
+}, false );
+
 // create element
 function createElement (name, properties, style) {
   var el = document.createElement(name)
@@ -390,7 +395,7 @@ function showLigand (sele) { // sele is ligandSele
   var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), 5) // select ligand and get atoms in ligands
   var withinGroup = s.getAtomSetWithinGroup(withinSele)
   var expandedSele = withinGroup.toSeleString()
-  neighborSele = '(' + expandedSele + ') and not water and not (' + sele + ')'
+  neighborSele = '(' + expandedSele + ') and not (water or ion) and not (' + sele + ')'
   ETRepr.setSelection(neighborSele)
   getET(pdbid).then(function(rank) {
     ETRepr.setParameters({color: NGL.ColormakerRegistry.addScheme(function() {
