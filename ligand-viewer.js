@@ -500,7 +500,7 @@ addElement(pocketOpacityRange)
 
 // ligand radius slider
 addElement(createElement('span', {
-  innerText: 'ligand opacity'
+  innerText: 'ligand radius'
 }, { top: getTopPosition(20), left: '12px', color: 'grey' }))
 var ligandRadiusRange = createElement('input', {
   type: 'range', value: 5, min: 1, max: 20, step: 1
