@@ -10,6 +10,8 @@ const gradient = [0xFF0932,
   0x067ADE,
   0x001D66]
 
+let ligand_sele = ""
+
 // set stage for html
 const stage = new NGL.Stage("viewport");
 NGL.DatasourceRegistry.add(
@@ -358,7 +360,7 @@ addElement(fullButton)
 // business bits
 function showLigand (sele) { // sele is ligandSele
   var s = struc.structure // structureComponenet from ngl
-  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), 5) // select ligand and get atoms in ligands
+  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), LIGAND_RADIUS) // select ligand and get atoms in ligands
   var withinGroup = s.getAtomSetWithinGroup(withinSele)
   var expandedSele = withinGroup.toSeleString() // expand selection to include neighboring residues?
   // neighborSele = '(' + expandedSele + ') and not (' + sele + ')'
@@ -392,7 +394,7 @@ function showLigand (sele) { // sele is ligandSele
   labelRepr.setSelection('(' + neighborSele + ') and not (water or ion)')
   ETRepr.setVisibility(true);
   var s = struc.structure // structureComponenet from ngl
-  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), 5) // select ligand and get atoms in ligands
+  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), LIGAND_RADIUS) // select ligand and get atoms in ligands
   var withinGroup = s.getAtomSetWithinGroup(withinSele)
   var expandedSele = withinGroup.toSeleString()
   neighborSele = '(' + expandedSele + ') and not (water or ion) and not (' + sele + ')'
@@ -417,6 +419,7 @@ var ligandSelect = createSelect([], {
     if (!sele) {
       showFull()
     } else {
+      ligand_sele = sele
       showLigand(sele)
     }
   }
@@ -441,6 +444,7 @@ var residueSelect = createSelect([], {
     if (!sele) {
       showFull()
     } else {
+      ligand_sele = sele
       showLigand(sele)
     }
   }
@@ -494,6 +498,18 @@ pocketOpacityRange.oninput = function (e) {
 }
 addElement(pocketOpacityRange)
 
+// ligand radius slider
+addElement(createElement('span', {
+  innerText: 'ligand opacity'
+}, { top: getTopPosition(20), left: '12px', color: 'grey' }))
+var ligandRadiusRange = createElement('input', {
+  type: 'range', value: 5, min: 1, max: 20, step: 1
+}, { top: getTopPosition(16), left: '12px' })
+ligandRadiusRange.oninput = function (e) {
+  LIGAND_RADIUS = e.target.value
+  showLigand(ligand_sele)
+}
+addElement(ligandRadiusRange)
 // carton checkbox
 var cartoonCheckbox = createElement('input', {
   type: 'checkbox',
@@ -697,6 +713,8 @@ addElement(createElement('span', {
 }, { top: getTopPosition(), left: '32px', color: 'grey' }))
 
 pdbid = "4kvq"
+LIGAND_RADIUS = 5
+ligand_sele = "PLM"
 loadStructure('rcsb://' + pdbid + '.mmtf').then(function () {
   showLigand('PLM');
 })
