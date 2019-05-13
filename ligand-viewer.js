@@ -712,6 +712,75 @@ addElement(createElement('span', {
   innerText: 'pi-stacking'
 }, { top: getTopPosition(), left: '32px', color: 'grey' }))
 
+var mutationText = createElement('span', {
+  innerText: "residue mutation"
+}, { top: getTopPosition(20), left: '12px', color: 'black' })
+addElement(mutationText)
+
+var positionText = createElement('span', {
+  innerText: "residue position"
+}, { top: getTopPosition(20), left: '12px', color: 'grey' })
+addElement(positionText)
+var positionInput = createElement('input', {
+  type: 'text',
+  title: 'Input residue position to mutate',
+  id: 'residuePosition'
+}, { top: getTopPosition(20), left: '12px', width: '120px' })
+addElement(positionInput)
+// document.getElementById("residuePosition").placeholder = "Residue position"
+
+var aminoacidText = createElement('span', {
+  innerText: "change to"
+}, { top: getTopPosition(20), left: '12px', color: 'grey' })
+addElement(aminoacidText)
+
+var aminoacidInput = createElement('input', {
+  type: 'text',
+  title: 'amino acid',
+  id: 'aminoacid'
+}, { top: getTopPosition(20), left: '12px', width: '120px' })
+addElement(aminoacidInput)
+
+
+function showMutation() {
+  position = document.getElementById("residuePosition").value
+  aminoacid = document.getElementById("aminoacid").value
+  // alert("position is " + position + "\naminoacid is " + aminoacid)
+  seq = struc.structure.getSequence()
+  start = struc.structure.residueStore.resno[0]
+  for (i=0;i < seq.length; i++) {
+    seq[i] = seq[i].toLowerCase()
+  }
+  seq[position - start] = aminoacid.toUpperCase()
+  seq = seq.join("")
+  console.log("https://gcg84x41k5.execute-api.eu-west-2.amazonaws.com/default/squirrel?pdbid=" + pdbid + "&seq=" + seq)
+  let req = new XMLHttpRequest
+  req.open("GET",
+  "https://gcg84x41k5.execute-api.eu-west-2.amazonaws.com/default/squirrel?pdbid=" + pdbid + "&seq=" + seq,
+            false)
+  req.send(null)
+  var result = new Blob( [ JSON.parse(req.responseText) ], { type: 'text/plain'} );
+  stage.loadFile( result , { ext: "pdb" } ).then(function (o) {
+    o.addRepresentation('cartoon', {
+      visible: true,
+      colorScheme: "residueindex"
+      })
+    o.addRepresentation('ball+stick', {
+      sele: position
+    })
+    LIGAND_RADIUS = 0
+    showLigand(ligand_sele)
+    o.autoView()
+  })
+
+}
+var mutationButton = createElement('input', {
+  value: 'Mutate!',
+  type: 'button',
+  onclick: showMutation
+}, { top: getTopPosition(30), left: '12px' })
+addElement(mutationButton)
+
 pdbid = "4kvq"
 LIGAND_RADIUS = 5
 ligand_sele = "PLM"
