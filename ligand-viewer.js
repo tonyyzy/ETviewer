@@ -326,7 +326,7 @@ var loadPdbidInput = createElement('input', {
   onkeypress: function (e) {
     if (e.keyCode === 13) {
       e.preventDefault()
-      pdbid = e.target.value
+      pdbid = e.target.value.toLowerCase()
       ET = getET(pdbid)
       loadStructure('rcsb://' + e.target.value)
     }
@@ -501,10 +501,10 @@ addElement(createElement('span', {
   innerText: 'ligand radius'
 }, { top: getTopPosition(20), left: '12px', color: 'grey' }))
 var ligandRadiusRange = createElement('input', {
-  type: 'range', value: 5, min: 1, max: 200, step: 1
+  type: 'range', value: 5, min: 1, max: 30, step: 1
 }, { top: getTopPosition(16), left: '12px' })
 ligandRadiusRange.oninput = function (e) {
-  LIGAND_RADIUS = e.target.value
+  LIGAND_RADIUS = parseInt(e.target.value)
   showLigand(ligand_sele)
 }
 addElement(ligandRadiusRange)
