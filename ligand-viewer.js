@@ -327,6 +327,7 @@ var loadPdbidInput = createElement('input', {
     if (e.keyCode === 13) {
       e.preventDefault()
       pdbid = e.target.value
+      ET = getET(pdbid)
       loadStructure('rcsb://' + e.target.value)
     }
   }
@@ -394,12 +395,9 @@ function showLigand (sele) { // sele is ligandSele
   labelRepr.setSelection('(' + neighborSele + ') and not (water or ion)')
   ETRepr.setVisibility(true);
   var s = struc.structure // structureComponenet from ngl
-  var withinSele = s.getAtomSetWithinSelection(new NGL.Selection(sele), LIGAND_RADIUS) // select ligand and get atoms in ligands
-  var withinGroup = s.getAtomSetWithinGroup(withinSele)
-  var expandedSele = withinGroup.toSeleString()
   neighborSele = '(' + expandedSele + ') and not (water or ion) and not (' + sele + ')'
   ETRepr.setSelection(neighborSele)
-  getET(pdbid).then(function(rank) {
+  ET.then(function(rank) {
     ETRepr.setParameters({color: NGL.ColormakerRegistry.addScheme(function() {
       this.atomColor = function (atom) {
         return gradient[rank[atom.resno]]
@@ -503,7 +501,7 @@ addElement(createElement('span', {
   innerText: 'ligand radius'
 }, { top: getTopPosition(20), left: '12px', color: 'grey' }))
 var ligandRadiusRange = createElement('input', {
-  type: 'range', value: 5, min: 1, max: 20, step: 1
+  type: 'range', value: 5, min: 1, max: 200, step: 1
 }, { top: getTopPosition(16), left: '12px' })
 ligandRadiusRange.oninput = function (e) {
   LIGAND_RADIUS = e.target.value
@@ -788,6 +786,7 @@ addElement(mutationButton)
 pdbid = "4kvq"
 LIGAND_RADIUS = 5
 ligand_sele = "PLM"
+var ET = getET(pdbid)
 loadStructure('rcsb://' + pdbid + '.mmtf').then(function () {
   showLigand('PLM');
 })

@@ -1,5 +1,6 @@
 function getET(pdbid) {
-	url = "https://cors-anywhere.herokuapp.com/http://mammoth.bcm.tmc.edu/ETserver2/pdbeasytrace/" + pdbid + "A.zip";
+	console.log("getET called")
+	url = "https://radiant-dawn-80961.herokuapp.com/http://mammoth.bcm.tmc.edu/ETserver2/pdbeasytrace/" + pdbid + "A.zip";
 	// url = "data/" + pdbid + "A.zip"
 	var promise = new JSZip.external.Promise(function (resolve, reject) {
 		JSZipUtils.getBinaryContent(url, function (err, data) {
@@ -17,6 +18,7 @@ function getET(pdbid) {
 			return zip.file("ET_" + pdbid + "A.ranks").async("string");
 		});
 	df = rankfile.then(function (content) {
+		console.log("df called")
 		list = content.split("\n");
 		for (var i = 0; i < list.length; i++) {
 			if (list[i][0] != "%" && list[i] != "") {
