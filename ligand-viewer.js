@@ -741,8 +741,12 @@ var aminoacidInput = createElement('input', {
 }, { top: getTopPosition(20), left: '12px', width: '120px' })
 addElement(aminoacidInput)
 
-
+var mCarton, mBallStick
 function showMutation() {
+  if (mCarton != undefined) {
+    mCarton.setVisibility(false)
+    mBallStick.setVisibility(false)
+  }
   position = document.getElementById("residuePosition").value
   aminoacid = document.getElementById("aminoacid").value
   // alert("position is " + position + "\naminoacid is " + aminoacid)
@@ -761,11 +765,11 @@ function showMutation() {
   req.send(null)
   var result = new Blob( [ JSON.parse(req.responseText) ], { type: 'text/plain'} );
   stage.loadFile( result , { ext: "pdb" } ).then(function (o) {
-    o.addRepresentation('cartoon', {
+    mCarton = o.addRepresentation('cartoon', {
       visible: true,
       colorScheme: "residueindex"
       })
-    o.addRepresentation('ball+stick', {
+    mBallStick =  o.addRepresentation('ball+stick', {
       sele: position
     })
     LIGAND_RADIUS = 0
