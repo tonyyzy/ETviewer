@@ -944,57 +944,10 @@ addElement(
   createElement("br")
 );
 
-var mutationText = createElement(
-  "span",
-  {
-    innerText: "residue mutation"
-  },
-  {color: "black" }
-);
-addElement(mutationText);
-
-var positionText = createElement(
-  "span",
-  {
-    innerText: "residue position"
-  },
-  {color: "grey" }
-);
-addElement(positionText);
-var positionInput = createElement(
-  "input",
-  {
-    type: "text",
-    title: "Input residue position to mutate",
-    id: "residuePosition"
-  },
-  {width: "120px" }
-);
-addElement(positionInput);
-// document.getElementById("residuePosition").placeholder = "Residue position"
-
-var aminoacidText = createElement(
-  "span",
-  {
-    innerText: "change to"
-  },
-  {color: "grey" }
-);
-addElement(aminoacidText);
-
-var aminoacidInput = createElement(
-  "input",
-  {
-    type: "text",
-    title: "amino acid",
-    id: "aminoacid"
-  },
-  {width: "120px" }
-);
-addElement(aminoacidInput);
-
 var mCarton, mBallStick;
+
 function showMutation() {
+  // TODO: promise/async
   if (mCarton != undefined) {
     mCarton.setVisibility(false);
     mBallStick.setVisibility(false);
@@ -1009,12 +962,7 @@ function showMutation() {
   }
   seq[position - start] = aminoacid.toUpperCase();
   seq = seq.join("");
-  console.log(
-    "https://gcg84x41k5.execute-api.eu-west-2.amazonaws.com/default/squirrel?pdbid=" +
-      pdbid +
-      "&seq=" +
-      seq
-  );
+
   let req = new XMLHttpRequest();
   req.open(
     "GET",
@@ -1039,15 +987,68 @@ function showMutation() {
     o.autoView();
   });
 }
-var mutationButton = createElement(
-  "input",
-  {
-    value: "Mutate!",
-    type: "button",
-    onclick: showMutation
-  }
-);
-addElement(mutationButton);
+
+function addMutation() {
+  var mutationText = createElement(
+    "span",
+    {
+      innerText: "residue mutation"
+    },
+    {color: "black" }
+  );
+  addElement(mutationText);
+
+  var positionText = createElement(
+    "span",
+    {
+      innerText: "residue position"
+    },
+    {color: "grey" }
+  );
+  addElement(positionText);
+
+  var positionInput = createElement(
+    "input",
+    {
+      type: "text",
+      title: "Input residue position to mutate",
+      id: "residuePosition"
+    },
+    {width: "120px" }
+  );
+  addElement(positionInput);
+
+  var aminoacidText = createElement(
+    "span",
+    {
+      innerText: "change to"
+    },
+    {color: "grey" }
+  );
+  addElement(aminoacidText);
+
+  var aminoacidInput = createElement(
+    "input",
+    {
+      type: "text",
+      title: "amino acid",
+      id: "aminoacid"
+    },
+    {width: "120px" }
+  );
+  addElement(aminoacidInput);
+
+  var mutationButton = createElement(
+    "input",
+    {
+      value: "Mutate!",
+      type: "button",
+      onclick: showMutation
+    }
+  );
+  addElement(mutationButton);
+}
+addMutation()
 
 pdbid = "4kvq";
 LIGAND_RADIUS = 5;
