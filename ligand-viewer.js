@@ -24,12 +24,20 @@ stage.setParameters({
 })
 
 // add element to stage's viewer container
-function addElement (el) {
-  Object.assign(el.style, {
-    position: 'absolute',
-    zIndex: 10
-  })
-  stage.viewer.container.appendChild(el)
+let leftbar = document.createElement('div')
+Object.assign(leftbar.style, {
+  position: 'absolute',
+  top: '0px',
+  left: '12px',
+  zIndex: 10
+})
+stage.viewer.container.appendChild(leftbar)
+function addElement () {
+
+  for (i = 0; i < arguments.length; i ++) {
+    leftbar.appendChild(arguments[i])
+  }
+  leftbar.appendChild(document.createElement('br'))
 }
 
 // Handle window resizing
@@ -311,14 +319,17 @@ var loadStructureButton = createFileButton('load structure', {
       loadStructure(e.target.files[ 0 ])
     }
   }
-}, { top: getTopPosition(), left: '12px' })
+})
 addElement(loadStructureButton)
+// addElement(createElement('br'))
+
 
 // load from PDB code
 var loadPdbidText = createElement('span', {
   innerText: 'load pdb id'
-}, { top: getTopPosition(20), left: '12px', color: 'grey' })
-addElement(loadPdbidText)
+})
+// addElement(loadPdbidText)
+addElement(createElement('div').appendChild(loadPdbidText))
 
 var loadPdbidInput = createElement('input', {
   type: 'text',
@@ -331,7 +342,7 @@ var loadPdbidInput = createElement('input', {
       loadStructure('rcsb://' + e.target.value)
     }
   }
-}, { top: getTopPosition(20), left: '12px', width: '120px' })
+})
 addElement(loadPdbidInput)
 
 // show full structure button
@@ -515,11 +526,12 @@ var cartoonCheckbox = createElement('input', {
   onchange: function (e) {
     cartoonRepr.setVisibility(e.target.checked)
   }
-}, { top: getTopPosition(30), left: '12px' })
-addElement(cartoonCheckbox)
-addElement(createElement('span', {
-  innerText: 'cartoon'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+})
+addElement(cartoonCheckbox,
+  createElement('span', {
+    innerText: 'cartoon'
+  }, {color: 'grey' })
+)
 
 // backbone checkbox
 var backboneCheckbox = createElement('input', {
@@ -529,10 +541,9 @@ var backboneCheckbox = createElement('input', {
     backboneRepr.setVisibility(e.target.checked)
   }
 }, { top: getTopPosition(20), left: '12px' })
-addElement(backboneCheckbox)
-addElement(createElement('span', {
+addElement(backboneCheckbox, createElement('span', {
   innerText: 'backbone'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // hydrogen checkbox
 var hydrogenCheckbox = createElement('input', {
@@ -546,10 +557,9 @@ var hydrogenCheckbox = createElement('input', {
     }
   }
 }, { top: getTopPosition(20), left: '12px' })
-addElement(hydrogenCheckbox)
-addElement(createElement('span', {
+addElement(hydrogenCheckbox, createElement('span', {
   innerText: 'hydrogen'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // side chain checkbox
 var sidechainAttachedCheckbox = createElement('input', {
@@ -562,10 +572,9 @@ var sidechainAttachedCheckbox = createElement('input', {
     )
   }
 }, { top: getTopPosition(20), left: '12px' })
-addElement(sidechainAttachedCheckbox)
-addElement(createElement('span', {
+addElement(sidechainAttachedCheckbox, createElement('span', {
   innerText: 'sidechainAttached'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // label checkbox
 var labelCheckbox = createElement('input', {
@@ -575,10 +584,9 @@ var labelCheckbox = createElement('input', {
     labelRepr.setVisibility(e.target.checked)
   }
 }, { top: getTopPosition(20), left: '12px' })
-addElement(labelCheckbox)
-addElement(createElement('span', {
+addElement(labelCheckbox, createElement('span', {
   innerText: 'label'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // hydrophobic interaction checkbox
 var hydrophobicCheckbox = createElement('input', {
@@ -591,7 +599,7 @@ var hydrophobicCheckbox = createElement('input', {
 addElement(hydrophobicCheckbox)
 addElement(createElement('span', {
   innerText: 'hydrophobic'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // hydrogen bond checkbox
 var hydrogenBondCheckbox = createElement('input', {
@@ -604,7 +612,7 @@ var hydrogenBondCheckbox = createElement('input', {
 addElement(hydrogenBondCheckbox)
 addElement(createElement('span', {
   innerText: 'hbond'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // weak hydrogen bond checkbox
 var weakHydrogenBondCheckbox = createElement('input', {
@@ -617,7 +625,7 @@ var weakHydrogenBondCheckbox = createElement('input', {
 addElement(weakHydrogenBondCheckbox)
 addElement(createElement('span', {
   innerText: 'weak hbond'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // water hydrogen bond checkbox
 var waterHydrogenBondCheckbox = createElement('input', {
@@ -630,7 +638,7 @@ var waterHydrogenBondCheckbox = createElement('input', {
 addElement(waterHydrogenBondCheckbox)
 addElement(createElement('span', {
   innerText: 'water-water hbond'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // backbone hydrogen bond checkbox
 var backboneHydrogenBondCheckbox = createElement('input', {
@@ -643,7 +651,7 @@ var backboneHydrogenBondCheckbox = createElement('input', {
 addElement(backboneHydrogenBondCheckbox)
 addElement(createElement('span', {
   innerText: 'backbone-backbone hbond'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // halogen bond checkbox
 var halogenBondCheckbox = createElement('input', {
@@ -656,7 +664,7 @@ var halogenBondCheckbox = createElement('input', {
 addElement(halogenBondCheckbox)
 addElement(createElement('span', {
   innerText: 'halogen bond'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // metal interaction checkbox
 var metalInteractionCheckbox = createElement('input', {
@@ -669,7 +677,7 @@ var metalInteractionCheckbox = createElement('input', {
 addElement(metalInteractionCheckbox)
 addElement(createElement('span', {
   innerText: 'metal interaction'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // saltbridge checkbox
 var saltBridgeCheckbox = createElement('input', {
@@ -682,7 +690,7 @@ var saltBridgeCheckbox = createElement('input', {
 addElement(saltBridgeCheckbox)
 addElement(createElement('span', {
   innerText: 'salt bridge'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 //cation-pi checkbox
 var cationPiCheckbox = createElement('input', {
@@ -695,7 +703,7 @@ var cationPiCheckbox = createElement('input', {
 addElement(cationPiCheckbox)
 addElement(createElement('span', {
   innerText: 'cation-pi'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 // pi-stacking checkbox
 var piStackingCheckbox = createElement('input', {
@@ -708,7 +716,7 @@ var piStackingCheckbox = createElement('input', {
 addElement(piStackingCheckbox)
 addElement(createElement('span', {
   innerText: 'pi-stacking'
-}, { top: getTopPosition(), left: '32px', color: 'grey' }))
+}, {color: 'grey' }))
 
 var mutationText = createElement('span', {
   innerText: "residue mutation"
