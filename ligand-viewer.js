@@ -100,13 +100,6 @@ function createFileButton(label, properties, style) {
   return button;
 }
 
-var topPosition = 12;
-
-function getTopPosition(increment) {
-  if (increment) topPosition += increment;
-  return topPosition + "px";
-}
-
 // create tooltip element and add to document body
 var tooltip = document.createElement("div");
 Object.assign(tooltip.style, {
@@ -365,14 +358,11 @@ var loadStructureButton = createFileButton("load structure", {
   }
 });
 addElement(loadStructureButton);
-// addElement(createElement('br'))
 
 // load from PDB code
 var loadPdbidText = createElement("span", {
   innerText: "load pdb id"
 });
-// addElement(loadPdbidText)
-addElement(createElement("div").appendChild(loadPdbidText));
 
 var loadPdbidInput = createElement("input", {
   type: "text",
@@ -386,6 +376,7 @@ var loadPdbidInput = createElement("input", {
     }
   }
 }, {width: '120px'});
+addElement(loadPdbidText);
 addElement(loadPdbidInput);
 
 // show full structure button
@@ -411,11 +402,11 @@ var fullButton = createElement(
     type: "button",
     onclick: showFull
   },
-  { top: getTopPosition(30), left: "12px" }
+  { left: "12px" }
 );
 addElement(fullButton);
 
-// business bits
+// show ligand based on selection
 function showLigand(sele) {
   // sele is ligandSele
   var s = struc.structure; // structureComponenet from ngl
@@ -494,7 +485,7 @@ var ligandSelect = createSelect(
       }
     }
   },
-  { top: getTopPosition(30), left: "12px", width: "130px" }
+  {width: "130px" }
 );
 addElement(ligandSelect);
 
@@ -532,138 +523,6 @@ var residueSelect = createSelect(
 addElement(residueSelect);
 addElement()
 
-function pocketOptions(item) {
-  var options = document.getElementById('pocket')
-  if (this.value == "Pocket options ▼") {
-    this.value = "Pocket options ►"
-  } else {
-    this.value = "Pocket options ▼"
-  }
-    if (options.style.display === "block") {
-      options.style.display = "none";
-    } else {
-      options.style.display = "block";
-    }
-}
-
-var pocketButton = createElement(
-  'input', 
-  {
-    type: 'button',
-    value: 'Pocket options ►',
-    onclick: pocketOptions
-  }
-)
-addElement(pocketButton)
-// pocket near clipping
-var pocket = document.createElement('div');
-Object.assign(pocket,
-  {
-    id: 'pocket',
-    className: 'collapsible'
-  })
-leftbar.appendChild(pocket)
-console.log(pocket)
-function addElementPocket() {
-    for (i = 0; i < arguments.length; i++) {
-      pocket.appendChild(arguments[i]);
-    }
-    pocket.appendChild(document.createElement("br"));
-  }
-addElementPocket(
-  createElement(
-    "span",
-    {
-      innerText: "pocket near clipping"
-    },
-    { color: "grey" }
-  )
-);
-var clipNearRange = createElement(
-  "input",
-  {
-    type: "range",
-    value: 0,
-    min: 0,
-    max: 10000,
-    step: 1,
-    className: 'pocket'
-  }
-);
-clipNearRange.oninput = function(e) {
-  var sceneRadius =
-    stage.viewer.boundingBox.getSize(new NGL.Vector3()).length() / 2;
-
-  var f = pocketRadius / sceneRadius;
-  var v = parseFloat(e.target.value) / 10000; // must be between 0 and 1
-  var c = 0.5 - f / 2 + v * f;
-
-  pocketRepr.setParameters({
-    clipNear: c * 100 // must be between 0 and 100
-  });
-};
-addElementPocket(clipNearRange);
-
-// pocket radius
-addElementPocket(
-  createElement(
-    "span",
-    {
-      innerText: "pocket radius clipping",
-      className: 'pocket'
-    },
-    {color: "grey" }
-  )
-);
-var clipRadiusRange = createElement(
-  "input",
-  {
-    type: "range",
-    value: 100,
-    min: 1,
-    max: 100,
-    step: 1,
-    className: 'pocket'
-  },
-  { top: getTopPosition(16), left: "12px" }
-);
-clipRadiusRange.oninput = function(e) {
-  pocketRadiusClipFactor = parseFloat(e.target.value) / 100;
-  pocketRepr.setParameters({
-    clipRadius: pocketRadius * pocketRadiusClipFactor
-  });
-};
-addElementPocket(clipRadiusRange);
-
-// pocket opacity slider
-addElementPocket(
-  createElement(
-    "span",
-    {
-      innerText: "pocket opacity",
-      className: 'pocket'
-    },
-    {color: "grey" }
-  )
-);
-var pocketOpacityRange = createElement(
-  "input",
-  {
-    type: "range",
-    value: 90,
-    min: 0,
-    max: 100,
-    step: 1,
-    className: 'pocket'
-  }
-);
-pocketOpacityRange.oninput = function(e) {
-  pocketRepr.setParameters({
-    opacity: parseFloat(e.target.value) / 100
-  });
-};
-addElementPocket(pocketOpacityRange);
-addElement()
 // ligand radius slider
 addElement(
   createElement(
@@ -795,6 +654,44 @@ addElement(
   createElement("br")
 );
 
+function interactionOptions(item) {
+  var options = document.getElementById('interaction')
+  if (this.value == "Interaction options ▼") {
+    this.value = "Interaction options ►"
+  } else {
+    this.value = "Interaction options ▼"
+  }
+    if (options.style.display === "block") {
+      options.style.display = "none";
+    } else {
+      options.style.display = "block";
+    }
+}
+
+var interactionButton = createElement(
+  'input', 
+  {
+    type: 'button',
+    value: 'Interaction options ►',
+    className: 'butt',
+    onclick: interactionOptions
+  }
+)
+addElement(interactionButton)
+// pocket near clipping
+var interaction = document.createElement('div');
+Object.assign(interaction,
+  {
+    id: 'interaction',
+    className: 'collapsible'
+  })
+leftbar.appendChild(interaction)
+function addElementInter() {
+  for (i = 0; i < arguments.length; i++) {
+    interaction.appendChild(arguments[i]);
+  }
+  interaction.appendChild(document.createElement("br"));
+}
 // hydrophobic interaction checkbox
 var hydrophobicCheckbox = createElement(
   "input",
@@ -805,9 +702,9 @@ var hydrophobicCheckbox = createElement(
       contactRepr.setParameters({ hydrophobic: e.target.checked });
     }
   },
-  { top: getTopPosition(30), left: "12px" }
+  { left: "12px" }
 );
-addElement(
+addElementInter(
   hydrophobicCheckbox,
   createElement(
     "span",
@@ -826,7 +723,7 @@ var hydrogenBondCheckbox = createElement("input", {
     contactRepr.setParameters({ hydrogenBond: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   hydrogenBondCheckbox,
   createElement(
     "span",
@@ -845,7 +742,7 @@ var weakHydrogenBondCheckbox = createElement("input", {
     contactRepr.setParameters({ weakHydrogenBond: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   weakHydrogenBondCheckbox,
   createElement(
     "span",
@@ -864,7 +761,7 @@ var waterHydrogenBondCheckbox = createElement("input", {
     contactRepr.setParameters({ waterHydrogenBond: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   waterHydrogenBondCheckbox,
   createElement(
     "span",
@@ -883,7 +780,7 @@ var backboneHydrogenBondCheckbox = createElement("input", {
     contactRepr.setParameters({ backboneHydrogenBond: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   backboneHydrogenBondCheckbox,
   createElement(
     "span",
@@ -902,7 +799,7 @@ var halogenBondCheckbox = createElement("input", {
     contactRepr.setParameters({ halogenBond: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   halogenBondCheckbox,
   createElement(
     "span",
@@ -921,7 +818,7 @@ var metalInteractionCheckbox = createElement("input", {
     contactRepr.setParameters({ metalComplex: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   metalInteractionCheckbox,
   createElement(
     "span",
@@ -940,7 +837,7 @@ var saltBridgeCheckbox = createElement("input", {
     contactRepr.setParameters({ saltBridge: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   saltBridgeCheckbox,
   createElement(
     "span",
@@ -959,7 +856,7 @@ var cationPiCheckbox = createElement("input", {
     contactRepr.setParameters({ cationPi: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   cationPiCheckbox,
   createElement(
     "span",
@@ -978,7 +875,7 @@ var piStackingCheckbox = createElement("input", {
     contactRepr.setParameters({ piStacking: e.target.checked });
   }
 });
-addElement(
+addElementInter(
   piStackingCheckbox,
   createElement(
     "span",
@@ -989,6 +886,140 @@ addElement(
   ),
   createElement("br")
 );
+
+function pocketOptions(item) {
+  var options = document.getElementById('pocket')
+  if (this.value == "show pocket options ▼") {
+    this.value = "show pocket options ►"
+  } else {
+    this.value = "show pocket options ▼"
+  }
+    if (options.style.display === "block") {
+      options.style.display = "none";
+    } else {
+      options.style.display = "block";
+    }
+}
+
+var pocketButton = createElement(
+  'input', 
+  {
+    type: 'button',
+    value: 'show pocket options ►',
+    className: 'butt',
+    onclick: pocketOptions
+  }
+)
+addElement(pocketButton)
+// pocket near clipping
+var pocket = document.createElement('div');
+Object.assign(pocket,
+  {
+    id: 'pocket',
+    className: 'collapsible'
+  })
+leftbar.appendChild(pocket)
+
+function addElementPocket() {
+    for (i = 0; i < arguments.length; i++) {
+      pocket.appendChild(arguments[i]);
+    }
+    pocket.appendChild(document.createElement("br"));
+  }
+addElementPocket(
+  createElement(
+    "span",
+    {
+      innerText: "pocket near clipping"
+    },
+    { color: "grey" }
+  )
+);
+var clipNearRange = createElement(
+  "input",
+  {
+    type: "range",
+    value: 0,
+    min: 0,
+    max: 10000,
+    step: 1,
+    className: 'pocket'
+  }
+);
+clipNearRange.oninput = function(e) {
+  var sceneRadius =
+    stage.viewer.boundingBox.getSize(new NGL.Vector3()).length() / 2;
+
+  var f = pocketRadius / sceneRadius;
+  var v = parseFloat(e.target.value) / 10000; // must be between 0 and 1
+  var c = 0.5 - f / 2 + v * f;
+
+  pocketRepr.setParameters({
+    clipNear: c * 100 // must be between 0 and 100
+  });
+};
+addElementPocket(clipNearRange);
+
+// pocket radius
+addElementPocket(
+  createElement(
+    "span",
+    {
+      innerText: "pocket radius clipping",
+      className: 'pocket'
+    },
+    {color: "grey" }
+  )
+);
+var clipRadiusRange = createElement(
+  "input",
+  {
+    type: "range",
+    value: 100,
+    min: 1,
+    max: 100,
+    step: 1,
+    className: 'pocket'
+  },
+  { left: "12px" }
+);
+clipRadiusRange.oninput = function(e) {
+  pocketRadiusClipFactor = parseFloat(e.target.value) / 100;
+  pocketRepr.setParameters({
+    clipRadius: pocketRadius * pocketRadiusClipFactor
+  });
+};
+addElementPocket(clipRadiusRange);
+
+// pocket opacity slider
+addElementPocket(
+  createElement(
+    "span",
+    {
+      innerText: "pocket opacity",
+      className: 'pocket'
+    },
+    {color: "grey" }
+  )
+);
+var pocketOpacityRange = createElement(
+  "input",
+  {
+    type: "range",
+    value: 90,
+    min: 0,
+    max: 100,
+    step: 1,
+    className: 'pocket'
+  }
+);
+pocketOpacityRange.oninput = function(e) {
+  pocketRepr.setParameters({
+    opacity: parseFloat(e.target.value) / 100
+  });
+};
+addElementPocket(pocketOpacityRange);
+
 
 var mCarton, mBallStick;
 
