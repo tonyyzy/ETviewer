@@ -6,6 +6,79 @@ body {
   padding-left: 100px;
 }
 
+div#root {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  height: 90%;
+  width: 90%;
+  z-index: 100;
+  background-color: aqua;
+}
+
+div.left {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  height: 80%;
+  width: 35%;
+  z-index: 101;
+  background-color: red;
+}
+
+div.left:hover {
+  cursor: pointer;
+}
+
+div.left p {
+  font-size: 400%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+div.right {
+  font-size: 400%;
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  height: 80%;
+  width: 35%;
+  z-index: 101;
+  background-color: red;
+}
+
+div.right p {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+div.center {
+  font-size: 400%;
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  height: 80%;
+  width: 70%;
+  z-index: 101;
+  background-color: red;
+}
+
+div.center p {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
 .collapsible{
   display: none
 }

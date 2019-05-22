@@ -36,7 +36,8 @@ Object.assign(leftbar.style, {
   left: "12px",
   zIndex: 10
 });
-stage.viewer.container.appendChild(leftbar);
+document.getElementById('viewport').appendChild(leftbar)
+// stage.viewer.container.appendChild(leftbar);
 function addElement() {
   for (i = 0; i < arguments.length; i++) {
     leftbar.appendChild(arguments[i]);
