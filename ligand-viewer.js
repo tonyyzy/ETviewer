@@ -91,6 +91,7 @@ function createFileButton(label, properties, style) {
     {
       value: label,
       type: "button",
+      className: 'butt',
       onclick: function() {
         input.click();
       }
@@ -186,7 +187,6 @@ var cartoonRepr,
 
 var struc;
 var neighborSele;
-var sidechainAttached = false;
 
 function loadStructure(input) {
   struc = undefined;
@@ -198,7 +198,6 @@ function loadStructure(input) {
   pocketOpacityRange.value = 0;
   cartoonCheckbox.checked = false;
   backboneCheckbox.checked = false;
-  hydrogenCheckbox.checked = true;
   hydrophobicCheckbox.checked = false;
   hydrogenBondCheckbox.checked = true;
   weakHydrogenBondCheckbox.checked = false;
@@ -399,6 +398,7 @@ var fullButton = createElement(
   "input",
   {
     value: "full structure",
+    className: 'butt',
     type: "button",
     onclick: showFull
   },
@@ -441,9 +441,7 @@ function showLigand(sele) {
 
   ligandRepr.setSelection(sele);
   neighborRepr.setSelection(
-    sidechainAttached
-      ? "(" + neighborSele + ") and (sidechainAttached or not polymer)"
-      : "(" + neighborSele + ") and (not water)"
+      "(" + neighborSele + ") and (not water)"
   );
   contactRepr.setSelection("(" + expandedSele + ") and (not water)");
   pocketRepr.setSelection(neighborSele2);
@@ -452,7 +450,7 @@ function showLigand(sele) {
     clipCenter: sview.center
   });
   labelRepr.setSelection("(" + neighborSele + ") and not (water or ion)");
-  ETRepr.setVisibility(true);
+  ETRepr.setVisibility(etCheckbox.checked);
   var s = struc.structure; // structureComponenet from ngl
   neighborSele =
     "(" + expandedSele + ") and not (water or ion) and not (" + sele + ")";
@@ -587,53 +585,6 @@ addElement(
   )
 );
 
-// hydrogen checkbox
-var hydrogenCheckbox = createElement("input", {
-  type: "checkbox",
-  checked: true,
-  onchange: function(e) {
-    if (e.target.checked) {
-      struc.setSelection("*");
-    } else {
-      struc.setSelection("not _H");
-    }
-  }
-});
-addElement(
-  hydrogenCheckbox,
-  createElement(
-    "span",
-    {
-      innerText: "hydrogen"
-    },
-    { color: "grey" }
-  )
-);
-
-// side chain checkbox
-var sidechainAttachedCheckbox = createElement("input", {
-  type: "checkbox",
-  checked: false,
-  onchange: function(e) {
-    sidechainAttached = e.target.checked;
-    neighborRepr.setSelection(
-      sidechainAttached
-        ? "(" + neighborSele + ") and (sidechainAttached or not polymer)"
-        : neighborSele
-    );
-  }
-});
-addElement(
-  sidechainAttachedCheckbox,
-  createElement(
-    "span",
-    {
-      innerText: "sidechainAttached"
-    },
-    { color: "grey" }
-  )
-);
-
 // label checkbox
 var labelCheckbox = createElement("input", {
   type: "checkbox",
@@ -650,22 +601,37 @@ addElement(
       innerText: "label"
     },
     { color: "grey" }
-  ),
-  createElement("br")
+  )
 );
 
-function interactionOptions(item) {
+// ET checkbox
+var etCheckbox = createElement("input", {
+  type: "checkbox",
+  checked: true,
+  onchange: function(e) {
+    ETRepr.setVisibility(e.target.checked);
+  }
+});
+addElement(
+  etCheckbox,
+  createElement(
+    "span",
+    {
+      innerText: "ET"
+    },
+    { color: "grey" }
+  )
+);
+
+function interactionOptions() {
   var options = document.getElementById('interaction')
   if (this.value == "Interaction options ▼") {
-    this.value = "Interaction options ►"
+    this.value = "Interaction options ►";
+    options.style.display = "none";
   } else {
-    this.value = "Interaction options ▼"
+    this.value = "Interaction options ▼";
+    options.style.display = "block";
   }
-    if (options.style.display === "block") {
-      options.style.display = "none";
-    } else {
-      options.style.display = "block";
-    }
 }
 
 var interactionButton = createElement(
@@ -828,6 +794,29 @@ addElementInter(
     { color: "grey" }
   )
 );
+// ionic interaction checkbox
+var ionicInteractionCheckbox = createElement('input', {
+  type: 'checkbox',
+  checked: true,
+  onchange: function (e) {
+    contactRepr.setParameters({ ionicInteraction: e.target.checked })
+  }
+})
+addElementInter(ionicInteractionCheckbox, createElement('span', {
+  innerText: 'ionic interaction'
+}, { color: 'grey' }))
+
+// metal coordination checkbox
+var metalCoordinationCheckbox = createElement('input', {
+  type: 'checkbox',
+  checked: true,
+  onchange: function (e) {
+    contactRepr.setParameters({ metalCoordination: e.target.checked })
+  }
+})
+addElementInter(metalCoordinationCheckbox, createElement('span', {
+  innerText: 'metal coordination'
+}, { color: 'grey' }))
 
 // saltbridge checkbox
 var saltBridgeCheckbox = createElement("input", {
@@ -887,18 +876,15 @@ addElementInter(
   createElement("br")
 );
 
-function pocketOptions(item) {
+function pocketOptions() {
   var options = document.getElementById('pocket')
   if (this.value == "show pocket options ▼") {
     this.value = "show pocket options ►"
+    options.style.display = "none";
   } else {
     this.value = "show pocket options ▼"
+    options.style.display = "block";
   }
-    if (options.style.display === "block") {
-      options.style.display = "none";
-    } else {
-      options.style.display = "block";
-    }
 }
 
 var pocketButton = createElement(
@@ -1020,7 +1006,6 @@ pocketOpacityRange.oninput = function(e) {
 };
 addElementPocket(pocketOpacityRange);
 
-
 var mCarton, mBallStick;
 
 function showMutation() {
@@ -1120,12 +1105,62 @@ function addMutation() {
     {
       value: "Mutate!",
       type: "button",
+      className: 'butt',
       onclick: showMutation
     }
   );
   addElement(mutationButton);
 }
 addMutation()
+
+
+function colorOptions() {
+  var options = document.getElementById('color')
+  if (this.value == "show color scale ▼") {
+    this.value = "show color scale ►"
+    options.style.display = "none";
+  } else {
+    this.value = "show color scale ▼"
+    options.style.display = "block";
+  }
+}
+
+var colorButton = createElement(
+  'input', 
+  {
+    type: 'button',
+    value: 'show color scale ►',
+    className: 'butt',
+    title: 'color scale',
+    onclick: colorOptions
+  }
+)
+addElement(colorButton)
+var color = document.createElement('table');
+Object.assign(color,
+  {
+    id: 'color',
+    className: 'collapsible tooltip'
+  })
+leftbar.appendChild(color)
+color.appendChild(createElement('span', {
+  className: 'tooltiptext',
+  innerText: 'More conserved residues have higher scores (deep blue)'
+}))
+var row1 = document.createElement('tr')
+var row2 = document.createElement('tr')
+color.appendChild(row1)
+color.appendChild(row2)
+for (i = 0; i < 11; i ++) {
+  row1.appendChild(createElement('td',
+  {
+    className: 'color-box'
+  },
+  {
+    backgroundColor: '#' + gradient[i].toString(16).padStart(6, 0)
+  }))
+  row2.appendChild(createElement('td', {textContent: i}))
+}
 
 pdbid = "4kvq";
 LIGAND_RADIUS = 5;
