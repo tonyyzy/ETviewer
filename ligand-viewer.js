@@ -282,6 +282,7 @@ function loadStructure(input) {
 }
 
 // get list of ligands
+var ligands
 function setLigandOptions() {
   ligandSelect.innerHTML = "";
   var options = [["", "select ligand"]];
@@ -295,6 +296,7 @@ function setLigandOptions() {
     if (rp.entity.description) name += " (" + rp.entity.description + ")";
     options.push([sele, name]);
   }, new NGL.Selection(ligandSele));
+  ligands = options
   options.forEach(function(d) {
     ligandSelect.add(
       createElement("option", {
@@ -303,6 +305,7 @@ function setLigandOptions() {
       })
     );
   });
+  console.log(options)
 }
 
 // get list of chains
@@ -323,6 +326,9 @@ function setChainOptions() {
     );
   });
 }
+
+// TODO: some structures may have more than one models
+// need to add selection options (e.g. NMR structure)
 
 // get list of residues
 function setResidueOptions(chain) {
@@ -1025,7 +1031,7 @@ function showMutation() {
   }
   seq[position - start] = aminoacid.toUpperCase();
   seq = seq.join("");
-
+  console.log(seq)
   let req = new XMLHttpRequest();
   req.open(
     "GET",

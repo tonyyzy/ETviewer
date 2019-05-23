@@ -65,8 +65,10 @@ div.right:hover {
 }
 
 div.center {
+  display: block;
   font-size: 2em;
   position: absolute;
+  text-align: center;
   top: 10%;
   right: 15%;
   height: 80%;
@@ -76,14 +78,19 @@ div.center {
   
 }
 
-div.center li {
+div.group {
   margin: 0;
   position: absolute;
   top: 50%;
   left: 50%;
-  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
+div.group p {
+  text-align: center;
+  position: relative;
+}
+
 .collapsible{
   display: none
 }
