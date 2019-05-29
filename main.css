@@ -6,6 +6,10 @@ body {
   padding-left: 100px;
 }
 
+/* div#viewport {
+  filter:blur(5px);
+} */
+
 div#root {
   position: absolute;
   top: 5%;
@@ -13,7 +17,8 @@ div#root {
   height: 90%;
   width: 90%;
   z-index: 100;
-  background-color: aqua;
+  background-color: #369396;
+  border-radius: 12pt;
 }
 
 div.left {
@@ -23,7 +28,8 @@ div.left {
   height: 80%;
   width: 35%;
   z-index: 101;
-  background-color: red;
+  background-color: #89f7fe;
+  border-radius: 12pt;
 }
 
 div.left:hover {
@@ -48,7 +54,8 @@ div.right {
   height: 80%;
   width: 35%;
   z-index: 101;
-  background-color: red;
+  background-color: #89f7fe;
+  border-radius: 12pt;
 }
 
 div.right p {
@@ -74,8 +81,8 @@ div.center {
   height: 80%;
   width: 70%;
   z-index: 101;
-  background-color: red;
-  
+  background-color: #89f7fe;
+  border-radius: 12pt;
 }
 
 div.group {
