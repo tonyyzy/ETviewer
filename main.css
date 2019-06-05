@@ -1,6 +1,6 @@
 html,
 body {
-  width: 100%;
+  width: 100% - 100px;
   height: 100%;
   margin: 0;
   padding-left: 100px;
