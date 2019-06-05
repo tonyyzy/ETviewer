@@ -1129,7 +1129,7 @@ var colorButton = createElement(
   'input', 
   {
     type: 'button',
-    value: 'show color scale ►',
+    value: 'show color scale ▼',
     className: 'butt',
     title: 'color scale',
     onclick: colorOptions
