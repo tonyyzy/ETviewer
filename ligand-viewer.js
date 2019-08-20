@@ -291,7 +291,8 @@ function setLigandOptions() {
     if (rp.inscode) sele += "^" + rp.inscode;
     if (rp.chain) sele += ":" + rp.chainname;
     var name = (rp.resname ? "[" + rp.resname + "]" : "") + sele;
-    if (rp.entity.description) name += " (" + rp.entity.description + ")";
+    if (rp.entity !== undefined) {
+    if (rp.entity.description) name += " (" + rp.entity.description + ")"};
     options.push([sele, name]);
   }, new NGL.Selection(ligandSele));
   options.forEach(function(d) {
@@ -310,7 +311,8 @@ function setChainOptions() {
   var options = [["", "select chain"]];
   struc.structure.eachChain(function(cp) {
     var name = cp.chainname;
-    if (cp.entity.description) name += " (" + cp.entity.description + ")";
+    if (cp.entity !== undefined) {
+    if (cp.entity.description) name += " (" + cp.entity.description + ")"};
     options.push([cp.chainname, name]);
   }, new NGL.Selection("polymer"));
   options.forEach(function(d) {
